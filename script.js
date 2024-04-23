@@ -1,9 +1,11 @@
 let modalQtd;
+let cart = []
+let modalKey = 0
 
 //com o map é possível mapear os elementos de um array  e gerar um novo array com base no array original. sempre devemos informar dos parâmetros o item que será um elemento do array e o indice que será a posição desse elemento no array.
 //index onde é guardado a posição de cada item no json
 
-//---------------EXIBE INFORMAÇÕES DA PIZZAS--------------------
+//--------------------------EXIBE INFORMAÇÕES DA PIZZAS--------------------
 pizzaJson.map((item, index) => {
 
     //clonando o pizza-item
@@ -26,7 +28,12 @@ pizzaJson.map((item, index) => {
         event.preventDefault();
         //iniciando a variável sempre com o valor 1
         modalQtd = 1
+
+
+        modalKey = index;
+
         //queremos pegar a key da pizza ou seja a posição dela no array para sabermos qual pizza foi clicada. Sabemos que todas as pizzas posuem um atrributo data-key com a chave da mesma, assim iremos utilizar o closest para selecionar o elemento e pegar esta key.
+
         //closest = busca a partir do elemento especificado o elemento mais próximo com a classe ou id especificado, primeiro ele irá procurar dentro de si e depois o elemento mais próximo, seja acima ou abaixo dele.
 
         //getAttribute =  pega o valor de um atributo
@@ -124,4 +131,40 @@ document.querySelector('.pizzaInfo--qtmenos').addEventListener('click', () => {
 
 });
 
+//-----------------------TAMANHOS DAS PIZZAS----------------------------
+//Selecionando todos os elementos pizzaInfp--size pegando o tamanho da pizza e a posição dos elementos
+
+//forEach == estrutura de repetição utilizada principalmente para percorrer um vetor ou uma coleção de dados
+//como se ele tivesse assim ['.pizzaInfo--size,.pizzaInfo--size,.pizzaInfo--size]
+document.querySelectorAll('.pizzaInfo--size').forEach((pizzaSize, position) => {
+    //sempre que em um sistemas tivermos que selecionar uma opção diferente e uma opção anterior estiver selecionada, devemos primeirp tirar a seleção de todas as opções anteriores e só depois selecionar a nova opção que o usuário selecionou.
+    pizzaSize.addEventListener('click', (event) => {
+
+        //removendo a classe selecionada dos tamanhos de pizza, assim garantimos que nenhuma pizza estará selecionada antes do usuário selecionar um tamanho 
+        document.querySelector('.pizzaInfo--size.selected').classList.remove('selected')
+
+        //adicionando a classe selected ao tamanho que o usuário está clicando
+        pizzaSize.classList.add('selected')
+    })
+})
+
+//------------------------BOTÃO DE ADICIONAR AO CARINHO---------------------------
+
+document.querySelector('.pizzaInfo--addButton').addEventListener('click', () =>{
+
+    let size = parseInt(document.querySelector('.pizza-Info.selected').getAttribute('.data-key'));
+
+    let identifier = pizzaJson[modalKey].id + '@' + size;
+
+    let key = cart.findIndex((item) =>{
+        return item.identifier == identifier
+    }) 
+
+    if (key >-1){
+        cart[key].qt += modalQtd;
+    }else{
+        cart.push(())
+    }
+
+})
 
